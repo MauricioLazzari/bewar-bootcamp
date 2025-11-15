@@ -24,31 +24,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="flex min-h-screen flex-col bg-[#0B2559]">
-        <header className="items-center">
-          <nav className="container mx-auto py-5">
-            <div className="flex items-center justify-center space-x-15 font-semibold text-white">
-              <a href="#" className="">
-                Início
-              </a>
-              <a href="#" className="">
-                Sobre
-              </a>
-              <a href="#" className="">
-                Projetos
-              </a>
-            </div>
-          </nav>
-        </header>
-
-        <main className="container mx-auto flex-1 p-6">Teste</main>
-
-        <footer className="mt-10 bg-gray-800 p-6 text-gray-300">
-          <div className="container mx-auto text-center">
-            <p>&copy; 2025 Meu Portfólio. Todos os direitos reservados.</p>
-          </div>
-        </footer>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col bg-[#0B2559]`}
+      >
+        {children}
       </body>
     </html>
   );
