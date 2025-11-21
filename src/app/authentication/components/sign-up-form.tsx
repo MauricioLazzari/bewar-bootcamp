@@ -1,10 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { authClient } from '@/lib/auth-client';
 
 // Schema/Regras do formuário
 const formSchema = z
@@ -27,7 +30,11 @@ const formSchema = z
 // Extrai o tipo TypeScript diretamente do schema do Zod
 type FormValues = z.infer<typeof formSchema>;
 
+// Componente do formulário de cadastro
 function SignUpForm() {
+  // Router para redirecionar
+  const router = useRouter();
+  // Formulário
   const form = useForm<FormValues>({
     // Conecta o Zod ao form
     resolver: zodResolver(formSchema),
@@ -40,9 +47,34 @@ function SignUpForm() {
   });
 
   // Botão para enviar os dados
-  function onSubmit(values: FormValues) {
-    // Dados do formulário
-    console.log('Valores validados:', values);
+  async function onSubmit(values: FormValues) {
+    // Desestrutura os dados e o erro
+    const { data, error } = await authClient.signUp.email({
+      name: values.nome,
+      email: values.email,
+      password: values.password,
+      fetchOptions: {
+        onSuccess: () => {
+          // Redireciona para a página inicial
+          router.push('/');
+        },
+        onError: (ctx) => {
+          // Verifica o erro e exibe uma mensagem
+          switch (ctx.error?.code) {
+            case 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL':
+              toast.error('E-mail já cadastrado!');
+              form.setError('email', {
+                type: 'manual',
+                message: 'E-mail já cadastrado!',
+              });
+              break;
+            default:
+              toast.error(ctx.error?.message);
+              break;
+          }
+        },
+      },
+    });
   }
 
   return (
@@ -105,7 +137,7 @@ function SignUpForm() {
           )}
         />
         {/* Botão criar conta */}
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full cursor-pointer">
           Criar conta
         </Button>
       </form>
