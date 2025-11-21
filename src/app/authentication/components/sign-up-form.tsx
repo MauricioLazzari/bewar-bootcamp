@@ -30,7 +30,7 @@ const formSchema = z
 // Extrai o tipo TypeScript diretamente do schema do Zod
 type FormValues = z.infer<typeof formSchema>;
 
-// Componente do formulário de cadastro
+// Componente SignUpForm
 function SignUpForm() {
   // Router para redirecionar
   const router = useRouter();
