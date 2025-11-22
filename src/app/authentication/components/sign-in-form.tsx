@@ -19,8 +19,10 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 // Componente SignInForm
-const SignInForm = () => {
+function SignInForm() {
+  // Navegação
   const router = useRouter();
+  // Formulário
   const form = useForm<FormValues>({
     // Conecta o Zod ao form
     resolver: zodResolver(formSchema),
@@ -98,6 +100,6 @@ const SignInForm = () => {
       </form>
     </Form>
   );
-};
+}
 
 export default SignInForm;

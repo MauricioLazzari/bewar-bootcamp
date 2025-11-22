@@ -27,9 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col bg-[#0B2559]`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col`}>
         {children}
 
         <Toaster position="bottom-center" />

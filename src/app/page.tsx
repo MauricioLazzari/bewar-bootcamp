@@ -1,11 +1,12 @@
-import { Button } from "@/components/ui/button";
+import Header from '@/app/common/header';
 
-const Home = () => {
+// Componente Home
+function Home() {
   return (
     <div>
-      <Button className="cursor-pointer">Click me</Button>
+      <Header />
     </div>
   );
-};
+}
 
 export default Home;
