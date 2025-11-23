@@ -1,9 +1,12 @@
+import { desc } from 'drizzle-orm';
 import Image from 'next/image';
 
 import Header from '@/app/common/header';
 import { db } from '@/db';
+import { productTable } from '@/db/schema';
 
 import CategorySelector from './common/category-selector';
+import Footer from './common/footer';
 import ProductList from './common/product-list';
 
 // Componente Home
@@ -16,10 +19,20 @@ async function Home() {
   });
   // Categorias
   const categories = await db.query.categoryTable.findMany();
+  // Produtos criados recentemente
+  const recentProducts = await db.query.productTable.findMany({
+    with: {
+      variants: true,
+    },
+    orderBy: [desc(productTable.createdAt)],
+    limit: 4,
+  });
 
   return (
-    <div>
+    <>
+      {/* Cabecalho */}
       <Header />
+      {/* Conteudo */}
       <div className="space-y-5 px-5">
         {/* Banner principal */}
         <Image
@@ -45,8 +58,12 @@ async function Home() {
           sizes="100vw"
           className="h-auto w-full"
         />
+        {/* Lista de produtos criados recentemente */}
+        <ProductList title="Novos produtos" products={recentProducts} />
       </div>
-    </div>
+      {/* Rodapé */}
+      <Footer />
+    </>
   );
 }
 

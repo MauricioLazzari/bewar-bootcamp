@@ -15,7 +15,7 @@ interface ProductListProps {
 // Componente ProductList
 const ProductList = ({ title, products }: ProductListProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 py-5">
       <h3 className="font-semibold">{title}</h3>
       <div className="flex w-full gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
         {products.map((product) => (
