@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { authClient } from '@/lib/auth-client';
 
 // Componente Header
@@ -48,6 +48,7 @@ function Header() {
           {/* Menu Header */}
           <SheetHeader>
             <SheetTitle>Menu</SheetTitle>
+            <SheetDescription className="sr-only">Menu de navegação</SheetDescription>
           </SheetHeader>
           <div className="px-5">
             {/* Se usuário estiver logado */}
@@ -80,7 +81,7 @@ function Header() {
             ) : (
               <>
                 {/* Se usuário não estiver logado */}
-                <div className="flex justify-between space-y-6">
+                <div className="flex items-center justify-between">
                   <div className="font-semibold">Olá. Faça seu login!</div>
                   <Button className="cursor-pointer" asChild variant="outline" size="icon">
                     <Link href="/authentication">

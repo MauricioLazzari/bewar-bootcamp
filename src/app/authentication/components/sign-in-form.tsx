@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { FcGoogle } from 'react-icons/fc';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -32,7 +33,7 @@ function SignInForm() {
     },
   });
 
-  // Botão para enviar os dados
+  // Botão para enviar os dados de login
   async function onSubmit(values: FormValues) {
     // Desestrutura os dados e error
     const { data, error } = await authClient.signIn.email({
@@ -59,6 +60,13 @@ function SignInForm() {
           }
         },
       },
+    });
+  }
+
+  // Botão para enviar os dados de login com Google
+  async function onGoogleSubmit() {
+    const data = await authClient.signIn.social({
+      provider: 'google',
     });
   }
 
@@ -93,10 +101,19 @@ function SignInForm() {
             </FormItem>
           )}
         />
-        {/* Botão entrar */}
-        <Button type="submit" className="w-full cursor-pointer">
-          Entrar
-        </Button>
+        <div className="flex flex-col gap-2">
+          <Button type="submit" className="w-full cursor-pointer">
+            Entrar
+          </Button>
+          <Button
+            type="button"
+            onClick={onGoogleSubmit}
+            className="w-full cursor-pointer border-2 border-gray-100 bg-white text-black hover:bg-white"
+          >
+            <FcGoogle className="h-5 w-5" />
+            Entrar com Google
+          </Button>
+        </div>
       </form>
     </Form>
   );

@@ -7,6 +7,7 @@ import { productTable } from '@/db/schema';
 
 import CategorySelector from './common/category-selector';
 import Footer from './common/footer';
+import PartnersBrands from './common/partners-brands';
 import ProductList from './common/product-list';
 
 // Componente Home
@@ -43,7 +44,8 @@ async function Home() {
           sizes="100vw"
           className="h-auto w-full"
         />
-
+        {/* Parceiros */}
+        <PartnersBrands />
         {/* Lista de produtos */}
         <ProductList title="Mais Vendidos" products={products} />
         {/* Lista de categorias */}

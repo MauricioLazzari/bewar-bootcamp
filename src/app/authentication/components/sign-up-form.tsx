@@ -12,7 +12,7 @@ import { authClient } from '@/lib/auth-client';
 // Schema/Regras do formuário
 const formSchema = z
   .object({
-    nome: z.string('Nome inválido.').trim().min(1, 'Nome é obrigatório'),
+    nome: z.string('Nome inválido.').trim().min(1, 'Nome é obrigatório.'),
     email: z.email({ message: 'Por favor, insira um e-mail válido.' }),
     password: z.string().min(8, 'A senha deve ter pelo menos 8 caracteres.'),
     passwordConfirmation: z.string().min(8, 'A senha deve ter pelo menos 8 caracteres.'),
@@ -136,7 +136,6 @@ function SignUpForm() {
             </FormItem>
           )}
         />
-        {/* Botão criar conta */}
         <Button type="submit" className="w-full cursor-pointer">
           Criar conta
         </Button>
