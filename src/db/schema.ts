@@ -30,10 +30,12 @@ export const productTable = pgTable('product', {
 // 1 Produto x N Variantes
 export const productRelations = relations(productTable, ({ one, many }) => {
   return {
+    // 1 Produto x 1 Categoria
     category: one(categoryTable, {
       fields: [productTable.categoryId],
       references: [categoryTable.id],
     }),
+    // 1 Produto x N Variantes
     variants: many(productVariantTable),
   };
 });
@@ -50,9 +52,10 @@ export const productVariantTable = pgTable('product_variant', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
-// 1 Variant x 1 Produto
+// 1 Variante x 1 Produto
 export const productVariantsRelations = relations(productVariantTable, ({ one }) => {
   return {
+    // 1 Variante x 1 Produto
     variants: one(productTable, {
       fields: [productVariantTable.productId],
       references: [productTable.id],

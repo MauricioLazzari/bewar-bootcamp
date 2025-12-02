@@ -1,3 +1,7 @@
+'use client';
+
+import Link from 'next/link';
+
 import { Button } from '@/components/ui/button';
 import { categoryTable } from '@/db/schema';
 
@@ -16,7 +20,7 @@ function CategorySelector({ categories }: CategorySelectorProps) {
             className="cursor-pointer rounded-full border border-purple-950 bg-white font-semibold"
             variant="ghost"
           >
-            {category.name}
+            <Link href={`/category/${category.slug}`}>{category.name}</Link>
           </Button>
         ))}
       </div>
