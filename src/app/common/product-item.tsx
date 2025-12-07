@@ -18,7 +18,7 @@ const ProductItem = ({ product, textContainerClassName }: ProductItemProps) => {
   const firstVariant = product.variants[0];
 
   return (
-    <Link href="/">
+    <Link href={`/product-variant/${firstVariant.slug}`}>
       {/* Imagem do produto */}
       <Image
         src={firstVariant.imageUrl}
