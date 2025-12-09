@@ -63,6 +63,7 @@ export const productVariantsRelations = relations(productVariantTable, ({ one })
   };
 });
 
+// Tabela de usuários
 export const userTable = pgTable('user', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
@@ -74,6 +75,43 @@ export const userTable = pgTable('user', {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+});
+
+// 1 Usuário x N Endereços de envio
+export const userRelations = relations(userTable, ({ many }) => {
+  return {
+    // 1 Usuário x N Endereços de envio
+    shippingAddresses: many(shippingAddressTable),
+  };
+});
+
+// Tabela de endereços de envio
+export const shippingAddressTable = pgTable('shipping_address', {
+  id: uuid().primaryKey().defaultRandom(),
+  userId: text('user_id').references(() => userTable.id, { onDelete: 'cascade' }),
+  recipientName: text('recipient_name').notNull(),
+  street: text().notNull(),
+  number: text().notNull(),
+  complement: text(),
+  city: text().notNull(),
+  state: text().notNull(),
+  neighborhood: text().notNull(),
+  zipCode: text().notNull(),
+  country: text().notNull(),
+  phone: text().notNull(),
+  email: text().notNull(),
+  cnpfcnpj: text().notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// 1 Endereço de envio x 1 Usuário
+export const shippingAddressRelations = relations(shippingAddressTable, ({ one }) => {
+  return {
+    user: one(userTable, {
+      fields: [shippingAddressTable.userId],
+      references: [userTable.id],
+    }),
+  };
 });
 
 export const sessionTable = pgTable('session', {
