@@ -78,10 +78,15 @@ export const userTable = pgTable('user', {
 });
 
 // 1 Usuário x N Endereços de envio
-export const userRelations = relations(userTable, ({ many }) => {
+export const userRelations = relations(userTable, ({ many, one }) => {
   return {
     // 1 Usuário x N Endereços de envio
     shippingAddresses: many(shippingAddressTable),
+    // 1 Usuário x 1 Carrinho
+    cart: one(cartTable, {
+      fields: [userTable.id],
+      references: [cartTable.userId],
+    }),
   };
 });
 
@@ -110,6 +115,57 @@ export const shippingAddressRelations = relations(shippingAddressTable, ({ one }
     user: one(userTable, {
       fields: [shippingAddressTable.userId],
       references: [userTable.id],
+    }),
+    cart: one(cartTable, {
+      fields: [shippingAddressTable.userId],
+      references: [cartTable.userId],
+    }),
+  };
+});
+
+// Tabela do carrinho
+export const cartTable = pgTable('cart', {
+  id: uuid().primaryKey().defaultRandom(),
+  userId: text('user_id').references(() => userTable.id, { onDelete: 'cascade' }),
+  shippingAddressId: uuid('shipping_address_id').references(() => shippingAddressTable.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// 1 Carrinho x 1 Usuário
+// 1 Carrinho x 1 Endereço de envio
+export const cartRelations = relations(cartTable, ({ many, one }) => {
+  return {
+    // 1 Carrinho x 1 Usuário
+    user: one(userTable, {
+      fields: [cartTable.userId],
+      references: [userTable.id],
+    }),
+    // 1 Carrinho x 1 Endereço de envio
+    shippingAddress: one(shippingAddressTable, {
+      fields: [cartTable.shippingAddressId],
+      references: [shippingAddressTable.id],
+    }),
+    // 1 Carrinho x N Itens do carrinho
+    cartItems: many(cartItemTable),
+  };
+});
+
+// Itens do carrinho
+export const cartItemTable = pgTable('cart_item', {
+  id: uuid().primaryKey().defaultRandom(),
+  cartId: uuid('cart_id').references(() => cartTable.id, { onDelete: 'cascade' }),
+  productId: uuid('product_id').references(() => productTable.id, { onDelete: 'cascade' }),
+  productVariantId: uuid('product_variant_id').references(() => productVariantTable.id, { onDelete: 'cascade' }),
+  quantity: integer('quantity').notNull().default(1),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// 1 Item do carrinho x 1 Carrinho
+export const cartItemRelations = relations(cartItemTable, ({ one }) => {
+  return {
+    cart: one(cartTable, {
+      fields: [cartItemTable.cartId],
+      references: [cartTable.id],
     }),
   };
 });
