@@ -19,7 +19,7 @@ export const addProductToCart = async (data: AddCartProductSchema) => {
   });
   // Se o usuário não estiver autenticado, lança um erro
   if (!session?.user) {
-    throw new Error('Não autorizado!');
+    throw new Error('Faça login para adicionar ao carrinho!');
   }
 
   // Busca o produto no banco de dados

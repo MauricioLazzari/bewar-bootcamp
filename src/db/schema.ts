@@ -43,7 +43,9 @@ export const productRelations = relations(productTable, ({ one, many }) => {
 // Tabela de variantes de produtos
 export const productVariantTable = pgTable('product_variant', {
   id: uuid().primaryKey().defaultRandom(),
-  productId: uuid('product_id').references(() => productTable.id, { onDelete: 'cascade' }),
+  productId: uuid('product_id')
+    .notNull()
+    .references(() => productTable.id, { onDelete: 'cascade' }),
   name: text().notNull(),
   slug: text().notNull().unique(),
   color: text().notNull(),
@@ -155,7 +157,9 @@ export const cartItemTable = pgTable('cart_item', {
   id: uuid().primaryKey().defaultRandom(),
   cartId: uuid('cart_id').references(() => cartTable.id, { onDelete: 'cascade' }),
   productId: uuid('product_id').references(() => productTable.id, { onDelete: 'cascade' }),
-  productVariantId: uuid('product_variant_id').references(() => productVariantTable.id, { onDelete: 'cascade' }),
+  productVariantId: uuid('product_variant_id')
+    .notNull()
+    .references(() => productVariantTable.id, { onDelete: 'cascade' }),
   quantity: integer('quantity').notNull().default(1),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
@@ -166,6 +170,14 @@ export const cartItemRelations = relations(cartItemTable, ({ one }) => {
     cart: one(cartTable, {
       fields: [cartItemTable.cartId],
       references: [cartTable.id],
+    }),
+    variant: one(productVariantTable, {
+      fields: [cartItemTable.productVariantId],
+      references: [productVariantTable.id],
+    }),
+    product: one(productTable, {
+      fields: [cartItemTable.productId],
+      references: [productTable.id],
     }),
   };
 });

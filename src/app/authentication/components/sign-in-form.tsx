@@ -19,8 +19,8 @@ const formSchema = z.object({
 // Extrai o tipo TypeScript diretamente do schema do Zod
 type FormValues = z.infer<typeof formSchema>;
 
-// Componente SignInForm
-function SignInForm() {
+// Função SignInForm
+export const SignInForm = () => {
   // Navegação
   const router = useRouter();
   // Formulário
@@ -117,6 +117,6 @@ function SignInForm() {
       </form>
     </Form>
   );
-}
+};
 
 export default SignInForm;
